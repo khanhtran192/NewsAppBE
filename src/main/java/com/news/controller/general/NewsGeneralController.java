@@ -6,7 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +22,7 @@ public class NewsGeneralController {
 	@Autowired
 	NewsService newsService;
 	
-	@GetMapping("/getNews")
+	@GetMapping("")
 	public NewsDTO findById(@RequestParam long id) {
 		return newsService.findById(id);
 	}
@@ -56,14 +56,8 @@ public class NewsGeneralController {
 	public List<News> mostViews(){
 		return newsService.mostViews();
 	}
-	
-//	update view
-	@PutMapping("/updateView")
-	public void updateView(@RequestParam long id) {
-		newsService.updateView(id);
-		return;
-	}
-	
+
+
 //	news by category 
 	@GetMapping("/paging/{categoryId}/{page}")
 	public PaginationDTO paging(@PathVariable Map<String, String> paging ) {

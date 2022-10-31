@@ -1,18 +1,19 @@
 package com.news.controller.general;
 
 import javax.servlet.http.HttpServletRequest;
+
+import com.news.dto.LoginDTO;
+import com.news.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.news.config.JwtProvider;
@@ -34,17 +35,25 @@ public class UserGeneralController {
 	
 	
 	@PostMapping("/login")
-	public JwtResponse login(@RequestParam String userName,@RequestParam String password) {
-		Authentication authentication =manager.authenticate(new UsernamePasswordAuthenticationToken(userName, password));
-		
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		UserDetails user=(UserDetails) authentication.getPrincipal();
-		return new JwtResponse(jwt.createToken(user));
+	public ResponseEntity<JwtResponse> login(LoginDTO loginDTO) {
+		try{
+			Authentication authentication =manager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword()));
+
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+			UserDetails user=(UserDetails) authentication.getPrincipal();
+			UserDTO userInfo = userService.findByUserName(user.getUsername());
+
+			return new ResponseEntity<>(new JwtResponse(jwt.createToken(user),
+					userInfo.getUserName(),userInfo.getFullName(), userInfo.getEmail()), HttpStatus.OK);
+		}catch (Exception ex){
+
+		}
+		return null;
 	}
 	
-	@PostMapping(value="/register",consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
-	public String register(@RequestPart UserCreateDTO dto,@RequestPart MultipartFile file,HttpServletRequest request) {
-		return userService.save(dto, file, request);
+	@PostMapping(value="/register")
+	public String register(@RequestBody UserCreateDTO dto) {
+		return userService.createUser(dto);
 	}
 	
 	

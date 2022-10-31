@@ -2,8 +2,8 @@ package com.news.service;
 
 
 
-import com.news.dto.MoreDescriptionDto;
+import com.news.dto.ContentDTO;
 
 public interface ContentService {
-	void save(MoreDescriptionDto des);
+	void createContent(ContentDTO des);
 }

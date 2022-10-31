@@ -15,7 +15,7 @@ public class ReCommentController {
 	@Autowired
 	ReCommentService reService;
 	
-	@PostMapping("/save")
+	@PostMapping("")
 	public void saveReComment(@RequestBody ReCommentCreateDTO reCommentCreate) {
 		reService.saveReComemnt(reCommentCreate);
 		return;

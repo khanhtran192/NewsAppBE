@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.news.dto.MoreDescriptionDto;
+import com.news.dto.ContentDTO;
 import com.news.dto.create.NewsCreateDTO;
 import com.news.entity.News;
 import com.news.service.ContentService;
@@ -31,25 +31,20 @@ public class AdminNewsControl {
 	@Autowired
 	ContentService desService;
 	
-	@PostMapping(value="/save",consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+	@PostMapping(value="/news",consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
 	public News save(HttpServletRequest request,@RequestPart NewsCreateDTO dto,@RequestPart MultipartFile file) {
 		return newsService.saveNews(dto,file,request);
 		
 	}
 	
-	@PostMapping(value="/saveMoreDes")
-	public void saveMoreDes(@RequestBody(required = false) MoreDescriptionDto des){
-		desService.save(des);
+	@PostMapping(value="/news/content")
+	public void saveMoreDes(@RequestBody(required = false) ContentDTO des){
+		desService.createContent(des);
 		return;
 	}
 
-	@PutMapping(value="/update",consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
-	public void update(HttpServletRequest request,@RequestPart NewsCreateDTO dto,@RequestPart MultipartFile file,@RequestPart long id) {
-		newsService.updateNews(id, dto, file, request);
-		return;
-	}
 	
-	@DeleteMapping("/delete")
+	@DeleteMapping("/news")
 	public void delete(@RequestParam long id) {
 		newsService.deleteNews(id);
 		return;

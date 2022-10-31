@@ -12,5 +12,8 @@ import lombok.NoArgsConstructor;
 @SuppressWarnings("serial")
 public class JwtResponse implements Serializable{
 	private String accessToken;
+	private String userName;
+	private String fullname;
+	private String email;
 	
 }

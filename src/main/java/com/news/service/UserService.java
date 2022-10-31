@@ -12,13 +12,13 @@ import com.news.entity.User;
 
 public interface UserService {
 
-	UserDTO findById(HttpServletRequest request);
+	UserDTO findByUserName(String UserName);
 	
 	User getUser(String userName,String password);
 
 	List<User> findAll();
 
-	String save(UserCreateDTO dto,MultipartFile file,HttpServletRequest request);
+	String createUser(UserCreateDTO dto);
 	void updateUser(String password,String userName);
 	
 	

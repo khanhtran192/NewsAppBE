@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService{
 
 //	create user
 	@Override
-	public String save(UserCreateDTO dto,MultipartFile file,HttpServletRequest request) {
+	public String createUser(UserCreateDTO dto) {
 		String defaultImage="macdinh.png";
 		try {
 //			check username exist
@@ -46,9 +46,9 @@ public class UserServiceImpl implements UserService{
 			op.get();
 			return "err";
 		} catch (Exception e) {
-				String imageURL=upload.upload(file, "user",defaultImage, request);
+//				String imageURL=upload.upload(file, "user",defaultImage, request);
 				User user =mapperEntity.mapperUser(dto);
-				user.setAvatar(imageURL);
+				user.setAvatar(defaultImage);
 				userRepos.save(user);
 			return "ok";
 		}
@@ -56,9 +56,7 @@ public class UserServiceImpl implements UserService{
 
 //	get user from token
 	@Override
-	public UserDTO findById(HttpServletRequest request) {
-		String token=filter.getJwtFromRequest(request);
-		String userName=jwt.getUserNameFromJWT(token);
+	public UserDTO findByUserName(String userName) {
 		UserDTO dto=mapperDTO.mapperUserDTO(userRepos.findById(userName).orElse(null));
 		return dto;
 	}

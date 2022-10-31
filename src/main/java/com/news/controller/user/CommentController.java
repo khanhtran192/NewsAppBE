@@ -18,7 +18,7 @@ public class CommentController {
 	@Autowired
 	CommentService cmtService;
 	
-	@PostMapping("/save")
+	@PostMapping("")
 	public void saveComment(@RequestBody CommentCreateDTO commentCreate) {
 		 cmtService.saveComment(commentCreate);
 		 return;
